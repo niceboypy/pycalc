@@ -1,0 +1,2 @@
+# pycalc
+scriptable python calculator
