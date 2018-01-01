@@ -3,6 +3,7 @@ from pycalmod import keywords, tagcolors
 from scrolledtext import ScrolledText as scrpwin
 import threading
 import random
+import time
 
 class syntaxhighlight(scrpwin):
     
@@ -16,58 +17,52 @@ class syntaxhighlight(scrpwin):
     def setupscrpwin(self):
         """setup the configurations for scrpwin widget"""
         #setup widget .after method
-        #for syntax highlighting
-        self.Scriptwindow.bind('<Key>', self.setflag)
+        #for syntax highlighting        
         self.delimiters = [' ', '.', '\n',',', '!', ':']#used to tokenize text lines
         self.tokenstart = self.tokenstop= '0.0'
-        self.Scriptwindow.after(20000, self.syntaxhighlighter)
         self.highlight =False
-    
-    def setflag(self,event):
-        self.highlight = False   
+        self.syntaxhighlighter()            
     
     
-    def syntaxhighlighter(self):
-        
-        #get the linestart and lineend of the 
-        #line in which the cursor is placed
-        print("here we've come")        
-        
+    def syntaxhighlighter(self):        
         if not self.highlight:                        
             startline = self.Scriptwindow.index('insert linestart')
             endline = self.Scriptwindow.index('insert lineend')
             curindex = startline
-            print("The startline is: ", startline)
-            print("The endline is: ", endline)
+            #print("The startline is: ", startline)
+            #print("The endline is: ", endline)
             self.tokenstart = startline
 
-            while(startline != endline):
-                print("in the first loop", random.randrange(1, 50))
-                import time
-                time.sleep(3)
-                    
+            while(startline != endline):                
                 while not(self.Scriptwindow.get(curindex) in self.delimiters):
                     curindex = self.Scriptwindow.index(curindex+'+1c')#increment
-                    print("The current index is: ", curindex)
-                    time.sleep(2)
-                    print("in the second loop",random.randrange(1, 50))
+                    #print("The current index is: ", curindex)
+                    #time.sleep(2)
+                    #print("in the second loop",random.randrange(1, 50))
 
                 #startline = curindex                  #update startline for check
                 self.tokenstop = curindex    #tokenstop tokenizes word
                 self.wordhighlight()
                 self.tokenstart=self.Scriptwindow.index(curindex+'+1c') if \
                                 curindex != endline else endline
-                print("Tokenstart here is: ", self.tokenstart)
+                #print("Tokenstart here is: ", self.tokenstart)
                 startline = self.tokenstart                
                 curindex = startline
-            print("loops ended")
+            #print("loops ended")
+        self.after(100, self.syntaxhighlighter)
 
 
     def wordhighlight(self):
         """check the tokenized word and see if it is the keyword
         """
         word = self.Scriptwindow.get(self.tokenstart, self.tokenstop)
-        print("The word is: ", word)
+        for key in keywords.keys():
+            if word in keywords[key]:
+                self.Scriptwindow.tag_add(key, self.tokenstart, self.tokenstop)
+                self.Scriptwindow.tag_config(key, foreground=tagcolors[key])
+            else:
+                self.Scriptwindow.tag_remove(key, self.tokenstart, self.tokenstop)
+
 
 
     def makeaccessible(self,objects):                

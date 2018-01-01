@@ -11,11 +11,11 @@ keywords = {'pycalcbuilts':['xcalc', 'lturn', 'rfurn', 'xmal'],
                         'compile','globals','map','reversed','__import__',
                         'complex','hasattr','max','round',	 
                         'delattr','hash','memoryview','set',],
-         'default': ''
+         'special':['exit', 'return']
             }
 
 tagcolors = {'pythonbuilts':'#30a6b0',
             'pycalcbuilts':'#ff9915',
-            'default':'#000000'}
+            'special':'#ff0000'}
 
        
