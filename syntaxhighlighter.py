@@ -18,7 +18,7 @@ class syntaxhighlight(scrpwin):
         """setup the configurations for scrpwin widget"""
         #setup widget .after method
         #for syntax highlighting        
-        self.delimiters = [' ', '.', '\n',',', '!', ':']#used to tokenize text lines
+        #self.delimiters = [' ', '.', '\n',',', '!', ':']#used to tokenize text lines
         self.tokenstart = self.tokenstop= '0.0'
         self.highlight =False
         self.syntaxhighlighter()            
@@ -28,13 +28,16 @@ class syntaxhighlight(scrpwin):
         if not self.highlight:                        
             startline = self.Scriptwindow.index('insert linestart')
             endline = self.Scriptwindow.index('insert lineend')
+            
+
             curindex = startline
             #print("The startline is: ", startline)
             #print("The endline is: ", endline)
             self.tokenstart = startline
 
             while(startline != endline):                
-                while not(self.Scriptwindow.get(curindex) in self.delimiters):
+                #while not(self.Scriptwindow.get(curindex) in self.delimiters):
+                while (self.Scriptwindow.get(curindex).isalpha()):
                     curindex = self.Scriptwindow.index(curindex+'+1c')#increment
                     #print("The current index is: ", curindex)
                     #time.sleep(2)
