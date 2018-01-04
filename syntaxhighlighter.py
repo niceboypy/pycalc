@@ -24,54 +24,85 @@ class syntaxhighlight(scrpwin):
         self.syntaxhighlighter()            
     
     
-    def syntaxhighlighter(self):        
+    def syntaxhighlighter(self, calledby=1):   
+        """used for highlighting,
+        calledby flag used to denote the block of code
+        that called for the syntax highlighter:
+        0 to denote the syntax highlighting is off
+        and 
+        1 to denote the syntax highlighting is on
+        ::: default is on
+        """
+        #print("The value of called by is: ", calledby)
+        
+
         if not self.highlight:                        
             startline = self.Scriptwindow.index('insert linestart')
             endline = self.Scriptwindow.index('insert lineend')
             
 
             curindex = startline
-            #print("The startline is: ", startline)
-            #print("The endline is: ", endline)
+            
             self.tokenstart = startline
-
+            
+                
             while(startline != endline):                
-                #while not(self.Scriptwindow.get(curindex) in self.delimiters):
                 while (self.Scriptwindow.get(curindex).isalpha()):
                     curindex = self.Scriptwindow.index(curindex+'+1c')#increment
-                    #print("The current index is: ", curindex)
-                    #time.sleep(2)
-                    #print("in the second loop",random.randrange(1, 50))
-
-                #startline = curindex                  #update startline for check
+                    
                 self.tokenstop = curindex    #tokenstop tokenizes word
-                self.wordhighlight()
+
+                if calledby ==1:                    
+                    self.wordhighlight(self.tokenstart, self.tokenstop, endline)
                 self.tokenstart=self.Scriptwindow.index(curindex+'+1c') if \
                                 curindex != endline else endline
-                #print("Tokenstart here is: ", self.tokenstart)
+                
                 startline = self.tokenstart                
                 curindex = startline
-            #print("loops ended")
-        self.after(100, self.syntaxhighlighter)
+           
+        
+        self.Scriptwindow.after(100, lambda: self.syntaxhighlighter(1))
 
 
-    def wordhighlight(self):
+    def wordhighlight(self, tokenstart, tokenstop, endline):
         """check the tokenized word and see if it is the keyword
         """
-        word = self.Scriptwindow.get(self.tokenstart, self.tokenstop)
+        
+        word = self.Scriptwindow.get(tokenstart, tokenstop)
+        
+        print("The word is: ", word)
+        print("The tokenstart is: ", tokenstart)
+        print("The tokenstop is:  ", tokenstop)
+        print("The endline is:    ", endline)
+        import time
+        time.sleep(3)
+        
         for key in keywords.keys():
             if word in keywords[key]:
-                self.Scriptwindow.tag_add(key, self.tokenstart, self.tokenstop)
+                self.Scriptwindow.tag_add(key, tokenstart, tokenstop)
                 self.Scriptwindow.tag_config(key, foreground=tagcolors[key])
             else:
-                self.Scriptwindow.tag_remove(key, self.tokenstart, self.tokenstop)
+                self.Scriptwindow.tag_remove(key, tokenstart, tokenstop)
+        
+        #the following code actually highlights
+        #everything following the def keyword
+        #but upon extracting the word following def
+        #it de-highlights all after the word
+        #effectively highlighting only the function name
+        if word in keywords['pythonfunctions']:
+                self.Scriptwindow.tag_add('arbitrary',tokenstop,endline)                                
+                self.Scriptwindow.tag_config('arbitrary', foreground="#74cb6b")
+        else:
+            self.Scriptwindow.tag_remove('arbitrary', tokenstop, endline)
+            
 
+    
+                    
 
+            
 
     def makeaccessible(self,objects):                
         self.Scriptwindow = objects
-
-
 
 
 if __name__  == '__main__':

@@ -11,11 +11,15 @@ keywords = {'pycalcbuilts':['xcalc', 'lturn', 'rfurn', 'xmal'],
                         'compile','globals','map','reversed','__import__',
                         'complex','hasattr','max','round',	 
                         'delattr','hash','memoryview','set',],
-         'special':['exit', 'return']
-            }
+         'pythonquits':['exit', 'return'],
+         'pythonfunctions': ['def'],
+         
+        }
 
 tagcolors = {'pythonbuilts':'#30a6b0',
             'pycalcbuilts':'#ff9915',
-            'special':'#ff0000'}
+            'pythonquits':'#ff0000', 
+            'pythonfunctions': '#c90f78',
+            'functiondeclarations':'#9af47b'}
 
        
