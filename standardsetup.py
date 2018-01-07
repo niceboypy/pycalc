@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 
 from tkinter import *
-
 from scrolledtext import ScrolledText
 
 
-class  standard_display_set(Frame):
+class  standard_display_set(Frame):    
     def __init__(self, parent=None):
-
-
-        self.additionals = []#just one button for now
-        self.configurations = {'config':{
+        Frame.__init__(self, parent)
+        
+        self.additionals = []#[(Button, 'button1')]#just one button for now
+        self.configurations ={'config':{
                       'button1':{
                           'text':'script','relief':FLAT,
                           'bg':'#989898','width':1,
@@ -28,32 +27,28 @@ class  standard_display_set(Frame):
                     }
 
 
-        self.parent = parent
-        #Frame.__init__(self)
-        self.setstandard()
-        
-        #optional
-        self.makewidgets(self.parent)
+        self.ParentStandardUI = parent        
+        self.setstandard()       
+        self.makewidgets(self.ParentStandardUI)
         
 
     
     def setstandard(self):
-        """set standard block, just define, not configure"""
-      
-      
+        """set standard block, just define, not configure"""      
         #set the standard input, display and output panels
         #output panel topmost
-        self.output = Message(self.parent)
+        self.output = Message(self.ParentStandardUI)
         #display panel
         #records history
         #until evaluated
         
          
-        self.display = ScrolledText(self.parent)
+        self.display = ScrolledText(self.ParentStandardUI)
         #entry widget
-        self.entry = Entry(self.parent)        
+        self.entry = Entry(self.ParentStandardUI)        
         
         #set configuration for the standard panel
+
         self.standard_UIconfigure()
         self.entry.focus()
         self.standard_CommandConfigure()
@@ -62,7 +57,7 @@ class  standard_display_set(Frame):
     def standard_UIconfigure(self):
         """configurations of all the standard block properties"""
         #configure subparent
-        self.parent.grid(row=0, column=0, sticky=E+W+N+S)
+        #self.ParentStandardUI.grid(row=0, column=0, sticky=E+W+N+S)
         
         #########################################################
         #output panel properties
@@ -73,8 +68,7 @@ class  standard_display_set(Frame):
             'font':(' ',25, 'bold')
         }#configurations defined as a single peice        
         self.output.grid(row=0, column=0, sticky=EW)
-        self.output.config(**output_configs)
-        
+        self.output.config(**output_configs)        
 
         #########################################################
         #display properties
@@ -84,6 +78,7 @@ class  standard_display_set(Frame):
             'height':10,'font':(' ', 15, 'normal'), 'bg':'#f8f8f8',
             'relief':FLAT
         }
+
         self.display.text.config(**display_text_configs)       
         self.display.grid(row=1, column=0,sticky=N+S+E+W)
         #display friendly status
@@ -91,7 +86,7 @@ class  standard_display_set(Frame):
         self.display.text.config(state='disabled')
 
         #setting scrollbar
-        scrollbar = Scrollbar(self.parent)
+        scrollbar = Scrollbar(self.ParentStandardUI)
         
         
         
@@ -100,23 +95,24 @@ class  standard_display_set(Frame):
         #config options
         #########################################################
         entry_configs ={
-            'font':('',15, ''), 'bg':'#45b4c8', 'relief':FLAT
-
+            'font':('', 15, ''), 'bg':'#45b4c8', 'relief':FLAT
         }
+
         self.entry.config(**entry_configs)
         self.entry.grid(row=2, column=0, sticky=EW)
 
-        Grid.columnconfigure(self.parent, 0, weight=1)
-        Grid.rowconfigure(self.parent,1,weight=1)
-        Grid.columnconfigure(self.parent.master, 0, weight=1)
-        Grid.rowconfigure(self.parent.master,0,weight=1)
+        Grid.columnconfigure(self.ParentStandardUI, 0, weight=1)
+        Grid.rowconfigure(self.ParentStandardUI,1,weight=1)
+        Grid.columnconfigure(self.ParentStandardUI.master, 0, weight=1)
+        Grid.rowconfigure(self.ParentStandardUI.master,0,weight=1)
 
         
     def standard_CommandConfigure(self):
         """configure standard panel's command and basic behaviour"""
         self.configureoutputpanel()
         self.display.text.bind('<KeyPress>', self.onKeyPress)
-        self.entry.bind('<Return>', self.OnEntryReturn)       
+        self.entry.bind('<Return>', self.OnEntryReturn) 
+             
 
     def configureoutputpanel(self):
         """override in class or todo later"""
@@ -132,8 +128,7 @@ class  standard_display_set(Frame):
                 #TODECIDE
                 #self.addition_items.append(item(parent)) #save if neccessary
                 item.config(**(self.configurations['config'][item.NAME]))
-                item.grid(**(self.configurations['grid'][item.NAME]))#see respective configuration
-                
+                item.grid(**(self.configurations['grid'][item.NAME]))#see respective configuration                
             self.addition_items[0].config(command=self.onScriptButton)
 
     def identify(self,parent, Object, name):
@@ -156,28 +151,18 @@ class  standard_display_set(Frame):
         self.display.text.see(END)
         self.entry.delete(0,END)
     
+    
     def onScriptButton(self):
-        #override in subclass
+    #override in subclass
         pass
 
 
 
 
 
-if __name__ == '__main__':
-                 
-
-    class prototype( standard_display_set):
-        def __init__(self, Parent):
-             standard_display_set.__init__(self, parent=Parent)
-
-        
-
-    root = Tk()
-    parent = Frame(root)
-
-    parent.pack(expand=YES, fill=BOTH)
-    parent.config(bg='green')
-    parent.config()
-    x = prototype(parent)
+if __name__ == '__main__':      
+    parent= Frame()
+    x = standard_display_set(parent)
+    parent.grid(row=0,column=0, sticky='nsew')
+    x.grid(row=0, column=0, sticky='nsew')
     mainloop()

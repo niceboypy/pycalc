@@ -3,7 +3,7 @@ from pycalmod import keywords, tagcolors
 from scrolledtext import ScrolledText as scrpwin
 import threading
 import random
-import time
+
 
 class syntaxhighlight(scrpwin):
     
@@ -13,6 +13,7 @@ class syntaxhighlight(scrpwin):
         self.builtkeys = {} #dictionary to cache keywords
         self.tokenstart = '1.0'
         self.tokenstop = self.Scriptwindow.index(END)
+        
 
     def setupscrpwin(self):
         """setup the configurations for scrpwin widget"""
@@ -32,9 +33,7 @@ class syntaxhighlight(scrpwin):
         and 
         1 to denote the syntax highlighting is on
         ::: default is on
-        """
-        #print("The value of called by is: ", calledby)
-        
+        """        
 
         if not self.highlight:                        
             startline = self.Scriptwindow.index('insert linestart')
@@ -47,7 +46,8 @@ class syntaxhighlight(scrpwin):
             
                 
             while(startline != endline):                
-                while (self.Scriptwindow.get(curindex).isalpha()):
+                while (self.Scriptwindow.get(curindex).isalpha() or\
+                       self.Scriptwindow.get(curindex) == '_'):#optional-for added underscore highlighting in function names
                     curindex = self.Scriptwindow.index(curindex+'+1c')#increment
                     
                 self.tokenstop = curindex    #tokenstop tokenizes word
@@ -60,8 +60,8 @@ class syntaxhighlight(scrpwin):
                 startline = self.tokenstart                
                 curindex = startline
            
-        
-        self.Scriptwindow.after(100, lambda: self.syntaxhighlighter(1))
+        if calledby==1:
+            self.Scriptwindow.after(100, lambda: self.syntaxhighlighter(1))
 
 
     def wordhighlight(self, tokenstart, tokenstop, endline):
@@ -69,13 +69,6 @@ class syntaxhighlight(scrpwin):
         """
         
         word = self.Scriptwindow.get(tokenstart, tokenstop)
-        
-        print("The word is: ", word)
-        print("The tokenstart is: ", tokenstart)
-        print("The tokenstop is:  ", tokenstop)
-        print("The endline is:    ", endline)
-        import time
-        time.sleep(3)
         
         for key in keywords.keys():
             if word in keywords[key]:
@@ -96,18 +89,19 @@ class syntaxhighlight(scrpwin):
             self.Scriptwindow.tag_remove('arbitrary', tokenstop, endline)
             
 
-    
-                    
-
-            
-
-    def makeaccessible(self,objects):                
+    def makeaccessible(self,objects): 
+        
         self.Scriptwindow = objects
 
 
 if __name__  == '__main__':
-    parent = Tk()
-
-    h  = syntaxhighlight(parent)
-    h.grid(row=0, column=0)
+    root = Tk()
+    
+    h  = syntaxhighlight(root)
+    h.grid(row=0, column=0,sticky='nsew')
+    Grid.rowconfigure(h,0, weight=1)
+    Grid.columnconfigure(h, 0, weight=1)
+    Grid.rowconfigure(h.master, 0, weight=1)
+    Grid.columnconfigure(h.master, 0, weight=1)
     h.mainloop()
+    

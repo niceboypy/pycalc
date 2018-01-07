@@ -5,7 +5,7 @@ class ScrolledText(Frame):
 
     def __init__(self, parent=None):# if needed text='',file=None):
         Frame.__init__(self, parent)                
-        self.pack(expand=YES, fill=BOTH)
+        #self.pack(expand=YES, fill=BOTH)
         self.setup()
 
     def setup(self):
@@ -33,7 +33,9 @@ if __name__ == '__main__':
     
     root = Tk()
     somekind = ScrolledText(root)
-    somekind.pack(expand=YES, fill=BOTH)
+    somekind.grid(row=0, column=0, sticky='nsew')
+    Grid.columnconfigure(somekind.master, 0, weight=1)
+    Grid.rowconfigure(somekind.master, 0, weight=1)
     #somekind.config(bg='green')
     somekind.mainloop()
 
