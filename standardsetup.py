@@ -27,25 +27,26 @@ class  standard_display_set(Frame):
                     }
 
 
-        self.ParentStandardUI = parent        
+         
         self.setstandard()       
-        self.makewidgets(self.ParentStandardUI)
+        self.makewidgets(self)
         
 
     
     def setstandard(self):
-        """set standard block, just define, not configure"""      
+        """set standard block, 
+        ust define, not configure"""      
         #set the standard input, display and output panels
         #output panel topmost
-        self.output = Message(self.ParentStandardUI)
+        self.output = Message(self)
         #display panel
         #records history
         #until evaluated
         
          
-        self.display = ScrolledText(self.ParentStandardUI)
+        self.display = ScrolledText(self)
         #entry widget
-        self.entry = Entry(self.ParentStandardUI)        
+        self.entry = Entry(self)        
         
         #set configuration for the standard panel
 
@@ -57,7 +58,7 @@ class  standard_display_set(Frame):
     def standard_UIconfigure(self):
         """configurations of all the standard block properties"""
         #configure subparent
-        #self.ParentStandardUI.grid(row=0, column=0, sticky=E+W+N+S)
+        
         
         #########################################################
         #output panel properties
@@ -86,7 +87,7 @@ class  standard_display_set(Frame):
         self.display.text.config(state='disabled')
 
         #setting scrollbar
-        scrollbar = Scrollbar(self.ParentStandardUI)
+        scrollbar = Scrollbar(self)
         
         
         
@@ -101,11 +102,12 @@ class  standard_display_set(Frame):
         self.entry.config(**entry_configs)
         self.entry.grid(row=2, column=0, sticky=EW)
 
-        Grid.columnconfigure(self.ParentStandardUI, 0, weight=1)
-        Grid.rowconfigure(self.ParentStandardUI,1,weight=1)
-        Grid.columnconfigure(self.ParentStandardUI.master, 0, weight=1)
-        Grid.rowconfigure(self.ParentStandardUI.master,0,weight=1)
+        Grid.rowconfigure(self,1,weight=1)
+        Grid.columnconfigure(self, 0, weight=1)
+        Grid.rowconfigure(self.master,0,weight=1)
+        Grid.columnconfigure(self.master, 0, weight=1)
 
+       
         
     def standard_CommandConfigure(self):
         """configure standard panel's command and basic behaviour"""
@@ -161,8 +163,8 @@ class  standard_display_set(Frame):
 
 
 if __name__ == '__main__':      
-    parent= Frame()
-    x = standard_display_set(parent)
-    parent.grid(row=0,column=0, sticky='nsew')
+    
+    x = standard_display_set()
+    
     x.grid(row=0, column=0, sticky='nsew')
     mainloop()

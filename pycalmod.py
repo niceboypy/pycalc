@@ -22,4 +22,4 @@ tagcolors = {'pythonbuilts':'#30a6b0',
             'pythonfunctions': '#c90f78',
             'functiondeclarations':'#9af47b'}
 
-       
+ 

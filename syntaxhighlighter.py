@@ -14,6 +14,7 @@ class syntaxhighlight(scrpwin):
         self.tokenstart = '1.0'
         self.tokenstop = self.Scriptwindow.index(END)
         
+        
 
     def setupscrpwin(self):
         """setup the configurations for scrpwin widget"""
@@ -99,9 +100,6 @@ if __name__  == '__main__':
     
     h  = syntaxhighlight(root)
     h.grid(row=0, column=0,sticky='nsew')
-    Grid.rowconfigure(h,0, weight=1)
-    Grid.columnconfigure(h, 0, weight=1)
-    Grid.rowconfigure(h.master, 0, weight=1)
-    Grid.columnconfigure(h.master, 0, weight=1)
+    
     h.mainloop()
     

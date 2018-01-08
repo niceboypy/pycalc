@@ -4,7 +4,8 @@ from tkinter import *
 class ScrolledText(Frame):
 
     def __init__(self, parent=None):# if needed text='',file=None):
-        Frame.__init__(self, parent)                
+        Frame.__init__(self, parent)   
+        
         #self.pack(expand=YES, fill=BOTH)
         self.setup()
 
